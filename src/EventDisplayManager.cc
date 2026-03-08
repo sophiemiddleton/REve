@@ -11,6 +11,10 @@ namespace mu2e {
  * @param m The mutex for thread synchronization.
  * @param fGui The pointer to the custom GUI element.
  */
+std::string drawfilename("EventDisplay/config/guiutils_current.txt");
+SimpleConfig drawconfig(drawfilename);
+
+
 EventDisplayManager::EventDisplayManager(
     ROOT::Experimental::REveManager* eveMgr,
     std::condition_variable& cv,
@@ -58,7 +62,7 @@ void EventDisplayManager::autoplay(int x)
         
         // 1. Retrieve the generic REveElement using the global manager (gEve) and the Element ID.
         // The function name should be FindElementWithId(fTextId_)but I found that this does not work so I hardcoded FIXME
-        ROOT::Experimental::REveElement* element = ROOT::Experimental::gEve->FindElementById(4336); 
+        ROOT::Experimental::REveElement* element = ROOT::Experimental::gEve->FindElementById(drawconfig.getInt("GUIID")); 
         
         if (element != nullptr) {
             // 2. Safely cast the generic element to the specific TextSelect type.
@@ -100,15 +104,14 @@ void EventDisplayManager::setTextSelectId(std::uint32_t textId) {
 void mu2e::EventDisplayManager::goToRunEvent(int runId, int eventId)
 {
     std::cout << "[EventDisplayManager::goToRunEvent] received: " << runId<<" "<<eventId << std::endl;
-    
     TextSelect* fText_obj = nullptr;
-    
+    std::cout<<" in go to "<<testid_<<std::endl;
     // Check if the global REveManager instance is available.
     if (ROOT::Experimental::gEve != nullptr) {
         
         // 1. Retrieve the generic REveElement using the global manager (gEve) and the Element ID.
         // The function name should be FindElementWithId(fTextId_)but I found that this does not work so I hardcoded FIXME
-        ROOT::Experimental::REveElement* element = ROOT::Experimental::gEve->FindElementById(4336); 
+        ROOT::Experimental::REveElement* element = ROOT::Experimental::gEve->FindElementById(drawconfig.getInt("GUIID")); 
         
         if (element != nullptr) {
             // 2. Safely cast the generic element to the specific TextSelect type.

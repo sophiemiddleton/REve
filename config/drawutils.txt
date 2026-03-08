@@ -1,9 +1,9 @@
 // draw options
 
-int TRKtrans  = 98;
+int TRKtrans  = 95;
 int CALtrans  = 100;
-int CRYtrans  = 90;
-int Crvtrans  = 98;
+int CRYtrans  = 95;
+int Crvtrans  = 92;
 int BLtrans  = 90;//BL = beamline elements
 
 int maxlevel = 8; //8=calocrystals, moved to 10 for PA

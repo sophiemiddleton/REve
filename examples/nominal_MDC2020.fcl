@@ -19,14 +19,20 @@ physics :
 }
 
 # print statements
+physics.analyzers.Mu2eEventDisplay.showPS : true
+physics.analyzers.Mu2eEventDisplay.showTS : true
+physics.analyzers.Mu2eEventDisplay.showDS : true
 physics.analyzers.Mu2eEventDisplay.diagLevel : 10
+#physics.analyzers.Mu2eEventDisplay.textElementID : 4336 (2020)
+#physics.analyzers.Mu2eEventDisplay.textElementID : 4313 (2025)
+#physics.analyzers.Mu2eEventDisplay.textElementID : 4285 (extracted 2020)
 
 # the path
 physics.EndPath  : [ @sequence::REveDis.seqBase]
 physics.REvePath : @local::REvePath
 physics.trigger_paths :  ["REvePath" ]
 physics.analyzers.Mu2eEventDisplay.SelectEvents : ["REvePath" ]
-
+physics.analyzers.Mu2eEventDisplay.filler.addSimParts : true
 
 source.inputCommands: ["keep *",
     "drop mu2e::CaloClusters_CaloClusterFast_*_*"

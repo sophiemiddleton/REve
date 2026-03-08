@@ -4,6 +4,7 @@
 #include "Offline/fcl/standardProducers.fcl"
 #include "Offline/fcl/standardServices.fcl"
 #include "EventDisplay/fcl/prolog.fcl"
+#include "EventDisplay/fcl/nominal.fcl"
 
 services : @local::Services.Reco
 
@@ -19,7 +20,11 @@ physics :
 }
 
 # print statements
+physics.analyzers.Mu2eEventDisplay.showPS : true
+physics.analyzers.Mu2eEventDisplay.showTS : true
+physics.analyzers.Mu2eEventDisplay.showDS : true
 physics.analyzers.Mu2eEventDisplay.diagLevel : 10
+#physics.analyzers.Mu2eEventDisplay.textElementID : 4313
 
 # the path
 physics.EndPath  : [ @sequence::REveDis.seqBase]

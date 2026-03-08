@@ -10,6 +10,7 @@
 #include <iostream>
 #include "EventDisplay/inc/GUI.hh"
 #include "EventDisplay/inc/TextSelect.hh"
+#include "Offline/ConfigTools/inc/SimpleConfig.hh"
 #include "nlohmann/json.hpp"
 #include <ROOT/REveManager.hxx>
 
@@ -26,6 +27,7 @@ namespace mu2e {
      */
     class EventDisplayManager : public ROOT::Experimental::REveElement {
     public:
+        
         // Default constructor required by ROOT's dictionary generation mechanism.
         EventDisplayManager() = default; 
 
@@ -36,6 +38,7 @@ namespace mu2e {
          * @param m The mutex for protecting access and for condition variable use.
          * @param fGui Pointer to the custom GUI element instance.
          */
+    
         explicit EventDisplayManager(ROOT::Experimental::REveManager* eveMgr,
                                     std::condition_variable& cv,
                                     std::mutex& m,
@@ -75,8 +78,9 @@ namespace mu2e {
          * @param textId The assigned REve Element ID.
          */
         void setTextSelectId(std::uint32_t textId);
-        int id_;
-        void setid(int id){ id_ = id;}
+        
+        
+        
     private:
 
         // Pointer to the global REve manager, controlling all visualization.
@@ -94,6 +98,8 @@ namespace mu2e {
         // Raw pointer to the TextSelect element. While fTextId_ is preferred for lookup, 
         // this is kept for direct access if necessary (but is less robust).
         TextSelect *fText_{nullptr};
+        
+        std::uint32_t testid_;
         
     };
 }

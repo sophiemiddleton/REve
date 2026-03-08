@@ -3,9 +3,9 @@
 
 # geometry options
 Mu2eEventDisplay.showCrv : true
-Mu2eEventDisplay.showPS : false
-Mu2eEventDisplay.showTS : false
-Mu2eEventDisplay.showDS : false
+Mu2eEventDisplay.showPS : true
+Mu2eEventDisplay.showTS : true
+Mu2eEventDisplay.showDS : true
 Mu2eEventDisplay.addCrvBars : true
 Mu2eEventDisplay.addKalInter : true
 Mu2eEventDisplay.addCrystalHits : true

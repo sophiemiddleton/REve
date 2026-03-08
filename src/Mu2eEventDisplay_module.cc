@@ -132,6 +132,7 @@ namespace mu2e
           fhicl::Atom<bool> extracted{Name("extracted"), Comment(""),false};
           fhicl::Atom<bool> showEM{Name("showEM"), Comment(""),false};
           fhicl::Atom<bool> seqMode{Name("seqMode"), Comment("turn off for go to any event functionality"),true};
+          fhicl::Atom<uint32_t> textElementID{Name("textElementID"), Comment("textElementID"),4336};
         };
 
         typedef art::EDAnalyzer::Table<Config> Parameters;
@@ -215,6 +216,7 @@ namespace mu2e
         std::vector<std::shared_ptr<DataProduct>> listoflists;
         GeomOptions geomOpts;
         ConfigFileLookupPolicy configFile;
+        uint32_t textElementID_;
     };
 
 
@@ -245,7 +247,8 @@ namespace mu2e
     strawdisplay_(conf().strawdisplay()),
     extracted_(conf().extracted()),
     showEM_(conf().showEM()),
-    seqMode_(conf().seqMode())
+    seqMode_(conf().seqMode()),
+    textElementID_(conf().textElementID())
     {
       geomOpts.fill(showCrv_,showPS_, showTS_, showDS_, show2D_, caloVST_, showST_, extracted_, showSTM_, showCalo_, showTracker_, showCaloCrystals_, showEM_ );
     }
@@ -584,8 +587,7 @@ void Mu2eEventDisplay::FillAnyCollection(const art::Event& evt, std::vector<std:
         eveMng_, 
         cv_, 
         m_, 
-        fGui.get()
-    );
+        fGui.get());
 
     // --- Scene Setup ---
 
@@ -614,16 +616,16 @@ void Mu2eEventDisplay::FillAnyCollection(const art::Event& evt, std::vector<std:
     world->AddElement(fGui.get());     
 
     // --- Final Linking and Command Registration ---
-
-    eventMgr_->setTextSelectId(fText->GetElementId()); 
-
+    //eventMgr_->setTextSelectId(fText->GetElementId()); 
+    //eventMgr_->setid(fText->GetElementId() );
+    
     // Register commands that the GUI buttons will execute. The command is routed to the 
     // method on the specified element (eventMgr_.get() or fPrint.get()).
     world->AddCommand("QuitRoot", "sap-icon://log", eventMgr_.get(), "QuitRoot()");
     world->AddCommand("NextEvent", "sap-icon://step", eventMgr_.get(), "NextEvent()");
     world->AddCommand("PrintMCInfo", "sap-icon://step", fPrint.get(), "PrintMCInfo()");
     world->AddCommand("PrintRecoInfo", "sap-icon://step", fPrint.get(), "PrintRecoInfo()");
-    eventMgr_->setid(fText->GetElementId() );
+    
     // --- Signal Art Thread to Proceed ---
 
     // Acquire a lock on the mutex.
