@@ -372,6 +372,35 @@ void DataInterface::AddCaloClusters(REX::REveManager *&eveMng, bool firstLoop_,
 }
 
 /*
+Enables the visualization of cluster of hits flagged as background by the FlagBkgHits module. This is work in progress. More features coming soon.
+*/
+void DataInterface::AddBkgClusters(REX::REveManager *&eveMng, bool firstLoop_, std::tuple<std::vector<std::string>, std::vector<const BkgClusterCollection*>> bkgcluster_tuple, REX::REveElement* &scene){
+  std::cout<<"BkgClusterCollection "<<std::endl;
+  std::vector<const BkgClusterCollection*> bkgcluster_list = std::get<1>(bkgcluster_tuple);
+  // std::vector<std::string> names = std::get<0>(bkgcluster_tuple);
+  std::cout<<"BkgClusterCollection size = "<<bkgcluster_list.size()<<std::endl;
+  for(unsigned int j = 0; j < bkgcluster_list.size(); j++){
+    const BkgClusterCollection* bccol = bkgcluster_list[j];
+    if(bccol->size() !=0 ){
+      // Loop over hits
+      for(unsigned int i=0; i< bccol->size(); i++){
+        mu2e::BkgCluster const  &bkgcluster= (*bccol)[i];
+        int colour = (i+3);
+        std::cout<<"BkgCluster ="<<bkgcluster.hits().size()<<std::endl;
+        CLHEP::Hep3Vector ClusterPos(pointmmTocm(bkgcluster.pos().x()), pointmmTocm(bkgcluster.pos().y()), pointmmTocm(bkgcluster.pos().z()));
+        std::string bctitle = "BkgCluster";
+        auto ps1 = new REX::REvePointSet(bctitle, bctitle,0);
+        ps1->SetNextPoint(ClusterPos.x(), ClusterPos.y() , ClusterPos.z());
+        ps1->SetMarkerColor(colour);
+        ps1->SetMarkerStyle(DataInterface::mstyle);
+        ps1->SetMarkerSize(DataInterface::msize);
+        if(ps1->GetSize() !=0 ) scene->AddElement(ps1);
+      }
+    }
+  }
+}
+
+/*
  * Adds reconstructed ComboHits data products to the REve visualization scene.
  * Hits are visualized as points with optional error bars
  * Elements are colored based on the t0 time of the digitization pulse.

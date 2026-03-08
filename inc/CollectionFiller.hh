@@ -55,6 +55,7 @@ namespace mu2e{
             
             // FHiCL Sequences for product tags (Art InputTags) - multiple instances allowed
             fhicl::Sequence<art::InputTag>chTag{Name("ComboHitCollection"),Comment("chTag")};
+            fhicl::Sequence<art::InputTag>bcTag{Name("BkgClusterCollection"),Comment("bcTag")};
             fhicl::Sequence<art::InputTag>tcTag{Name("TimeClusterCollection"),Comment("ttcTag")};
             fhicl::Sequence<art::InputTag>crvrecoTag{Name("CrvRecoPulseCollection"),Comment("crvTag")};
             fhicl::Sequence<art::InputTag>crvcoinTag{Name("CrvCoincidenceClusterCollection"),Comment("crvcoinTag")};
@@ -73,6 +74,7 @@ namespace mu2e{
             
             // Boolean flags to enable/disable loading of specific collection types
             fhicl::Atom<bool> addHits{Name("addHits"), Comment("set to add the hits"),false}; // Corresponds to ComboHits
+            fhicl::Atom<bool> addBkgClusters{Name("addBkgClusters"), Comment("set to add the bkg clusters"),false}; // Corresponds to bkg clusters
             fhicl::Atom<bool> addCrvRecoPulse{Name("addCrvRecoPulse"), Comment("set to add crv hits"),false}; // Corresponds to CrvRecoPulses
             fhicl::Atom<bool> addCrvClusters{Name("addCrvClusters"), Comment("set to add crv clusters"),false}; // Corresponds to CrvCoincidenceCluster
             fhicl::Atom<bool> addTimeClusters{Name("addTimeClusters"), Comment("set to add the Crv hits"),false};
@@ -105,6 +107,7 @@ namespace mu2e{
         // --- Input Tag Members (Filled from FHiCL config) ---
         // These store the actual InputTags used by art::Event::getValidHandle().
         std::vector<art::InputTag> chTag_;
+        std::vector<art::InputTag> bcTag_;
         std::vector<art::InputTag> tcTag_;
         std::vector<art::InputTag> crvrecoTag_;
         std::vector<art::InputTag> crvcoinTag_;
@@ -122,7 +125,7 @@ namespace mu2e{
         art::Run *_run;
         
         // --- Boolean Control Flags (Copied from FHiCL Config) ---
-        bool addHits_, addCrvRecoPulse_, addCrvClusters_, addTimeClusters_, addTrkHits_, addCaloDigis_, 
+        bool addHits_, addBkgClusters_, addCrvRecoPulse_, addCrvClusters_, addTimeClusters_, addTrkHits_, addCaloDigis_, 
              addClusters_, addHelixSeeds_, addKalSeeds_, addCosmicTrackSeeds_, addMCTraj_,
              addSurfSteps_, addSimParts_, FillAll_;
              

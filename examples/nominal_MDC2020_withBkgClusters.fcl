@@ -1,0 +1,76 @@
+
+# author : Sophie Middleton
+# purpose : example for helix tracks
+#include "Offline/fcl/minimalMessageService.fcl"
+#include "Offline/fcl/standardProducers.fcl"
+#include "Offline/fcl/standardServices.fcl"
+#include "EventDisplay/fcl/prolog.fcl"
+
+services : @local::Services.Reco
+
+process_name : HelixED
+
+source : { module_type : RootInput }
+
+physics :
+{
+  analyzers : { @table::REveDis.analyzers}
+  producers : { @table::REveDis.producers }
+  filters : { @table::REveDis.filters }
+}
+# geometry options
+physics.analyzers.Mu2eEventDisplay.showCRV : false
+
+physics.analyzers.Mu2eEventDisplay.showPS : false
+physics.analyzers.Mu2eEventDisplay.showTS : false
+physics.analyzers.Mu2eEventDisplay.showDS : true
+physics.analyzers.Mu2eEventDisplay.addCRVBars : false
+
+physics.analyzers.Mu2eEventDisplay.addKalInter : true
+physics.analyzers.Mu2eEventDisplay.addCrystalHits : false
+physics.analyzers.Mu2eEventDisplay.filler.addHelixSeeds : false
+physics.analyzers.Mu2eEventDisplay.filler.addKalSeeds : false
+physics.analyzers.Mu2eEventDisplay.filler.addClusters : false
+physics.analyzers.Mu2eEventDisplay.filler.addHits : true #  adds ComboHits
+physics.analyzers.Mu2eEventDisplay.filler.addBkgClusters : true 
+physics.analyzers.Mu2eEventDisplay.filler.addCrvClusters : false
+physics.analyzers.Mu2eEventDisplay.filler.addCrvHits : false
+physics.analyzers.Mu2eEventDisplay.filler.addTimeClusters : false
+physics.analyzers.Mu2eEventDisplay.filler.addSimParts : false
+physics.analyzers.Mu2eEventDisplay.addTrkStrawHits : false
+physics.analyzers.Mu2eEventDisplay.filler.addCosmicTrackSeeds : false
+physics.analyzers.Mu2eEventDisplay.filler.addMCTraj : false
+physics.analyzers.Mu2eEventDisplay.specifyTag : false
+
+# allows movement through events in sequential order
+physics.analyzers.Mu2eEventDisplay.seqMode : true
+physics.analyzers.Mu2eEventDisplay.strawdisplay : false
+
+# print statements
+physics.analyzers.Mu2eEventDisplay.diagLevel : 10
+
+# the path
+physics.EndPath  : [ @sequence::REveDis.seqBase]
+physics.REvePath : @local::REvePath
+physics.trigger_paths :  ["REvePath" ]
+physics.analyzers.Mu2eEventDisplay.SelectEvents : ["REvePath" ]
+
+# useless file name
+services.TFileService.fileName: "/dev/null"
+
+#
+# to display a selected set of events, #include this file with a list of eventid triplets: ie:
+#
+##include "Mu2eEventDisplay/examples/nominal_example.fcl"
+#physics.filters.eidsel.idsToMatch : [
+#  "1202:636:337031",
+#  "1202:648:370322" ]
+#
+physics.analyzers.Mu2eEventDisplay.gdmlname :"Offline/gen/gdml/mu2e_MDC2020.gdml"
+
+source.inputCommands: ["keep *",
+    "drop mu2e::CaloClusters_CaloClusterFast_*_*"
+    ]
+
+services.TFileService.fileName: "/dev/null"
+services.GeometryService.inputFile: "Offline/Mu2eG4/geom/geom_common_MDC2020.txt"

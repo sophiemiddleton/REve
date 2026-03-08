@@ -9,6 +9,7 @@ namespace mu2e{
 
   CollectionFiller::CollectionFiller(const Config& conf) :
     chTag_(conf.chTag()),
+    bcTag_(conf.bcTag()),
     tcTag_(conf.tcTag()),
     crvrecoTag_(conf.crvrecoTag()),
     crvcoinTag_(conf.crvcoinTag()),
@@ -21,6 +22,7 @@ namespace mu2e{
     SurfStepsTag_(conf.SurfStepsTag()),
     SimTag_(conf.SimTag()),
     addHits_(conf.addHits()),
+    addBkgClusters_(conf.addBkgClusters()),
     addCrvRecoPulse_(conf.addCrvRecoPulse()),
     addCrvClusters_(conf.addCrvClusters()),
     addTimeClusters_(conf.addTimeClusters()),
@@ -83,8 +85,21 @@ void CollectionFiller::FillRecoCollections(const art::Event& evt, DataCollection
         }
         data.combohit_tuple = std::make_tuple(data.combohit_labels,data.combohit_list);
     }
-    
-    // --- 2. CrvRecoPulses (Crv Raw Reconstructed Hits) ---
+
+    // --- 2. BkgClusters (Background hit clusters) ---
+    if(FillAll_  or (CollectionName == BkgClusters)){
+      for(const auto &tag : bcTag_){
+        auto bcH = evt.getValidHandle<mu2e::BkgClusterCollection>(tag);
+        data.bccol = bcH.product();
+        data.bkgcluster_list.push_back(data.bccol);
+        std::string name = TurnNameToString(tag);
+        std::cout<<"Plotting BkgCluster Instance: "<<name<<std::endl;
+        data.bkgcluster_labels.push_back(name);
+      }
+      data.bkgcluster_tuple = std::make_tuple(data.bkgcluster_labels,data.bkgcluster_list);
+    }
+
+    // --- 3. CrvRecoPulses (Crv Raw Reconstructed Hits) ---
     if(FillAll_ or (addCrvRecoPulse_ and CollectionName==CrvRecoPulses)){
         for(const auto &tag : crvrecoTag_){
             auto chH = evt.getValidHandle<mu2e::CrvRecoPulseCollection>(tag);
@@ -96,8 +111,9 @@ void CollectionFiller::FillRecoCollections(const art::Event& evt, DataCollection
         }
         data.crvpulse_tuple = std::make_tuple(data.crvpulse_labels,data.crvpulse_list);
     }
+
     
-    // --- 3. CrvCoincidenceClusters (Crv Coincidence Clusters) ---
+    // --- 4. CrvCoincidenceClusters (Crv Coincidence Clusters) ---
     if(FillAll_ or (addCrvClusters_ and CollectionName==CrvCoincidenceCluster)){
         std::cout << "Fill CrvClusters " << std::endl;
         for(const auto &tag : crvcoinTag_){
@@ -112,7 +128,7 @@ void CollectionFiller::FillRecoCollections(const art::Event& evt, DataCollection
         data.crvcoin_tuple = std::make_tuple(data.crvcoin_labels,data.crvcoin_list);
     }
     
-    // --- 4. TimeClusters (Seed Time Clusters) ---
+    // --- 5. TimeClusters (Seed Time Clusters) ---
     if(FillAll_ or (CollectionName == TimeClusters)){
         for(const auto &tag : tcTag_){
             auto chH = evt.getValidHandle<mu2e::TimeClusterCollection>(tag);
@@ -125,7 +141,7 @@ void CollectionFiller::FillRecoCollections(const art::Event& evt, DataCollection
         data.timecluster_tuple = std::make_tuple(data.timecluster_labels,data.timecluster_list);
     }
     
-    // --- 5. TrkHits (ComboHits treated as Tracking Hits) ---
+    // --- 6. TrkHits (ComboHits treated as Tracking Hits) ---
     //FIXME - is this the same as the ComboHits version?
     if(FillAll_ or (addTrkHits_ and CollectionName == TrkHits)){
         for(const auto &tag : chTag_){
@@ -139,7 +155,7 @@ void CollectionFiller::FillRecoCollections(const art::Event& evt, DataCollection
         data.combohit_tuple = std::make_tuple(data.combohit_labels,data.combohit_list);
     }
     
-    // --- 6. CaloDigis (Raw Calorimeter Signal Samples) ---
+    // --- 7. CaloDigis (Raw Calorimeter Signal Samples) ---
     if(FillAll_ or (CollectionName == CaloDigis)){
         for(const auto &tag : calodigTag_){
             auto chH = evt.getValidHandle<mu2e::CaloDigiCollection>(tag);
@@ -152,7 +168,7 @@ void CollectionFiller::FillRecoCollections(const art::Event& evt, DataCollection
         data.calocluster_tuple = std::make_tuple(data.calocluster_labels,data.calocluster_list);
     }
     
-    // --- 7. CaloClusters (Reconstructed Calorimeter Energy Clusters) ---
+    // --- 8. CaloClusters (Reconstructed Calorimeter Energy Clusters) ---
     if(FillAll_ or (CollectionName == CaloClusters)){
         for(const auto &tag : cluTag_){
             auto chH = evt.getValidHandle<mu2e::CaloClusterCollection>(tag);
@@ -165,7 +181,7 @@ void CollectionFiller::FillRecoCollections(const art::Event& evt, DataCollection
         data.calocluster_tuple = std::make_tuple(data.calocluster_labels,data.calocluster_list);
     }
     
-    // --- 8. HelixSeeds (Pre-tracking Helix Fits) ---
+    // --- 9. HelixSeeds (Pre-tracking Helix Fits) ---
     if(FillAll_ or (CollectionName==HelixSeeds)){
         for(const auto &tag : helixSeedTag_){
             auto chH = evt.getValidHandle<mu2e::HelixSeedCollection>(tag);
@@ -178,7 +194,7 @@ void CollectionFiller::FillRecoCollections(const art::Event& evt, DataCollection
         data.helix_tuple = std::make_tuple(data.helix_labels,data.helix_list);
     }
     
-    // --- 9. KalSeeds (Final Kalman Filter Tracks) ---
+    // --- 10. KalSeeds (Final Kalman Filter Tracks) ---
     if(FillAll_ or (CollectionName==KalSeeds)){
         for(const auto &tag : kalSeedTag_){
             auto chH = evt.getValidHandle<mu2e::KalSeedPtrCollection>(tag); 
@@ -191,7 +207,7 @@ void CollectionFiller::FillRecoCollections(const art::Event& evt, DataCollection
         data.track_tuple = std::make_tuple(data.track_labels,data.track_list);
     }
     
-    // --- 10. CosmicTrackSeeds (Cosmic Ray Track Candidates) ---
+    // --- 11. CosmicTrackSeeds (Cosmic Ray Track Candidates) --- // FIXME - is this needed?
     if(FillAll_ or (CollectionName == CosmicTrackSeeds)){
         auto chH = evt.getValidHandle<mu2e::CosmicTrackSeedCollection>(cosmicTrackSeedTag_);
         data.CosmicTrackSeedcol = chH.product();

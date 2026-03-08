@@ -3,6 +3,9 @@
 #include "Offline/RecoDataProducts/inc/CrvCoincidenceCluster.hh"
 #include "Offline/RecoDataProducts/inc/CaloCluster.hh"
 #include "Offline/RecoDataProducts/inc/ComboHit.hh"
+#include "Offline/RecoDataProducts/inc/BkgClusterHit.hh"
+#include "Offline/RecoDataProducts/inc/BkgCluster.hh"
+#include "Offline/RecoDataProducts/inc/ComboHit.hh"
 #include "Offline/RecoDataProducts/inc/CrvRecoPulse.hh"
 #include "Offline/RecoDataProducts/inc/TimeCluster.hh"
 #include "Offline/RecoDataProducts/inc/HelixSeed.hh"
@@ -36,6 +39,7 @@ namespace mu2e{
 
       //DataProducts:
       const mu2e::ComboHitCollection* chcol = 0;
+      const mu2e::BkgClusterCollection* bccol = 0;
       const mu2e::CrvRecoPulseCollection* crvrecocol = 0;
       const mu2e::CrvCoincidenceClusterCollection* crvcoincol = 0;
       const mu2e::TimeClusterCollection *tccol = 0;
@@ -53,6 +57,7 @@ namespace mu2e{
       std::vector<const mu2e::CaloDigiCollection*> calodigi_list;
       std::vector<const mu2e::CaloClusterCollection*> calocluster_list;
       std::vector<const mu2e::ComboHitCollection*> combohit_list;
+      std::vector<const mu2e::BkgClusterCollection*> bkgcluster_list;
       std::vector<const mu2e::CrvRecoPulseCollection*> crvpulse_list;
       std::vector<const mu2e::CrvCoincidenceClusterCollection*> crvcoin_list;
       std::vector<const mu2e::TimeClusterCollection*> timecluster_list;
@@ -67,6 +72,7 @@ namespace mu2e{
       std::vector<std::string> mctrack_labels;
       std::vector<std::string> surfstep_labels;
       std::vector<std::string> combohit_labels;
+      std::vector<std::string> bkgcluster_labels;
       std::vector<std::string> crvpulse_labels;
       std::vector<std::string> crvcoin_labels;
       std::vector<std::string> sim_labels;
@@ -77,6 +83,7 @@ namespace mu2e{
       std::tuple<std::vector<std::string>, std::vector<const mu2e::CaloDigiCollection*>> calodigi_tuple;
       std::tuple<std::vector<std::string>, std::vector<const mu2e::CaloClusterCollection*>> calocluster_tuple;
       std::tuple<std::vector<std::string>, std::vector<const mu2e::ComboHitCollection*>> combohit_tuple;
+      std::tuple<std::vector<std::string>, std::vector<const mu2e::BkgClusterCollection*>> bkgcluster_tuple;
       std::tuple<std::vector<std::string>, std::vector<const mu2e::CrvRecoPulseCollection*>> crvpulse_tuple;
       std::tuple<std::vector<std::string>, std::vector<const mu2e::CrvCoincidenceClusterCollection*>> crvcoin_tuple;
       std::tuple<std::vector<std::string>, std::vector<const mu2e::TimeClusterCollection*>> timecluster_tuple;
@@ -90,6 +97,7 @@ namespace mu2e{
         this->calodigi_list.clear();
         this->calocluster_list.clear();
         this->combohit_list.clear();
+        this->bkgcluster_list.clear();
         this->crvpulse_list.clear();
         this->crvcoin_list.clear();
         this->timecluster_list.clear();
@@ -101,6 +109,7 @@ namespace mu2e{
         this->calocluster_labels.clear();
         this->mctrack_labels.clear();
         this->combohit_labels.clear();
+        this->bkgcluster_labels.clear();
         this->crvpulse_labels.clear();
         this->helix_labels.clear();
         this->crvcoin_labels.clear();
